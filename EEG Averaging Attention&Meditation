@@ -15,6 +15,7 @@ byte  payloadData[64] = {0};
 byte  poorQuality = 0;
 byte  attention = 0;
 byte  meditation = 0;
+int   currentposition = 0;
 
 // system variables
 long    lastReceivedPacket = 0;
@@ -113,9 +114,8 @@ void loop() {
         float avgAttention = sumAttention / 5.0; // Divide by the number of elements for average
         float avgMeditation = sumMeditation / 5.0; // Divide by the number of elements for average
 
-// change attention and meditation ranges 
-  if (avgAttention > 100 && avgMeditation > 80) { 
-    // Rotate five revolutions slowly clockwise
+if (avgAttention > 100 && avgMeditation > 80) {
+  if (currentPosition < 3) { // Check if the maximum position is not reached
     digitalWrite(dirPin, HIGH);
     for (int i = 0; i < 5 * stepsPerRevolution; i++) {
       digitalWrite(stepPin, HIGH);
@@ -125,8 +125,11 @@ void loop() {
     }
     delay(10000); // Ten seconds delay
 
-  } else if (avgAttention < 20 && avgMeditation < 20 ) { 
-    // Rotate five revolutions slowly counterclockwise
+    // Increment the current position
+    currentPosition++;
+  }
+} else if (avgAttention < 20 && avgMeditation < 20) {
+  if (currentPosition > -3) { // Check if the minimum position is not reached
     digitalWrite(dirPin, LOW);
     for (int i = 0; i < 5 * stepsPerRevolution; i++) {
       digitalWrite(stepPin, HIGH);
@@ -135,7 +138,11 @@ void loop() {
       delayMicroseconds(2000);
     }
     delay(10000); // Ten seconds delay
+
+    // Decrement the current position
+    currentPosition--;
   }
+}
 
         // Print the results
         if(bigPacket) {
