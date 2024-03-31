@@ -4,7 +4,7 @@
 #define DEBUGOUTPUT 0
 #define powercontrol 10
 #define dirPin 2
-#define stepPin 3
+#define stepPin 10
 #define stepsPerRevolution 1600
 
 // checksum variables
